@@ -1,0 +1,7 @@
+# tell GitHub to ignore private key and any audio files
+
+.env
+venv/
+__pycache__/
+*.wav
+*.mp3
