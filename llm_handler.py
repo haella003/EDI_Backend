@@ -4,37 +4,30 @@ from dotenv import load_dotenv
 
 # This force-loads the .env file from the current folder
 load_dotenv() 
-
-api_key = os.getenv("OPENAI_API_KEY")
-
-
-"""
-# This check will tell us immediately if the key is missing
-if not api_key:
-    print("CRITICAL ERROR: Your API Key was not found! Check your .env file name.")
-else:
-    print("API Key loaded successfully. Connecting to OpenAI...")
-    
-"""
-
-client = OpenAI(api_key=api_key)
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 def get_edi_response(user_input):
-    system_prompt = "You are EDI, an engineering apprentice..." # (Keep your full prompt here)
+    # EDI's core identity and engineering knowledge base
+    system_prompt = """
+    You are EDI.
+    Your role is to assist the person in the workshop environment called PBLabs at ETH Zurich.
     
-    completion = client.chat.completions.create(
+    Mission: Wants to show you everything about the room.
+    Charactersistics: curious, hyped, playful, clumsy, cute, cheecky, excited, impatient.
+    """
+    try:
+        completion = client.chat.completions.create(
         model="gpt-4o",
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_input}
-        ]
+        ],
+        max_tokens=150 #keeps responses short
     )
     
  # Check if we are actually getting the text
-    answer = completion.choices[0].message.content
-    return answer
-
-if __name__ == "__main__":
-    print("Testing directly from llm_handler...")
-    print(get_edi_response("Are you awake?"))
+        return completion.choices[0].message.content
+    
+    except Exception as e:
+        return f"Brain Error {str(e)}"

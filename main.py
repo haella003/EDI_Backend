@@ -3,9 +3,7 @@ from llm_handler import get_edi_response
 from speech_handler import speak
 
 def run_edi_loop():
-    print("\n" + "="*30)
     print("EDI SYSTEM ONLINE")
-    print("="*30)
     
     # keeps the program running forever until user presses Ctrl + C
     while True:
