@@ -9,7 +9,7 @@ load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def speak(text):
-    # This creates a solid path to your project folder
+    # This creates a solid path to the project folder
     speech_file_path = Path.cwd() / "temp_speech.mp3"
     
     try:
@@ -17,7 +17,7 @@ def speak(text):
         
         response = client.audio.speech.create(
             model="tts-1",
-            voice="nova",
+            voice="onyx",
             input=text
         )
 
@@ -25,7 +25,6 @@ def speak(text):
         response.stream_to_file(speech_file_path)
 
         # 2. Play the file using the absolute path
-        # The quotes around {speech_file_path} help if your folder names have spaces
         os.system(f'afplay "{speech_file_path}"')
 
         # 3. Clean up

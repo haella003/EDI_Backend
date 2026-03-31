@@ -1,4 +1,5 @@
 import sounddevice as sd
+import numpy as np
 from scipy.io.wavfile import write
 import os
 from openai import OpenAI
@@ -7,16 +8,56 @@ from dotenv import load_dotenv
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def record_audio(filename="input.wav", duration=5, fs=44100):
-    print(f"--- RECORDING ({duration}s) ---")
-    # This captures the sound from your mic
-    recording = sd.rec(int(duration * fs), samplerate=fs, channels=1)
-    sd.wait()  # Wait until recording is finished
-    print("--- RECORDING COMPLETE ---")
+# voice activity detection
+THRESHOLD = 0.015 # How loud the sound has to be to count as speech, lower = more sensitive 
+SILENCE_LIMIT = 1.5 # How many seconds of silence to wait for before considering the speech ended
+
+
+def record_audio(filename="input.wav", fs=44100):
+    print("--- LISTENING FOR SPEECH ---")
     
-    # Save as a standard wav file
-    write(filename, fs, recording)
-    return filename
+    chunk_duration = 0.1 # 100ms per chunk
+    chunk_samples = int(fs * chunk_duration)
+    
+    recording = []
+    has_spoken = False
+    silence_timer = 0.0
+    
+    # opena a continous microphone stream
+    with sd.InputStream(samplerate=fs, channels=1) as stream:
+        while True:
+            # read a chunk of audio
+            chunk, overflowed = stream.read(chunk_samples)
+            
+            # calculate the volume of this chunk
+            volume = np.linalg.norm(chunk) / np.sqrt(len(chunk))
+            
+            # 1. did user start speaking?
+            if volume > THRESHOLD:
+                if not has_spoken:
+                    print("--- SPEECH DETECTED (Recroding...) ---")
+                    has_spoken = True
+                silence_timer = 0.0
+            
+            # 2. if user has started speaking, save the audio chunks
+            if has_spoken:
+                recording.append(chunk)
+                
+                # 3. if it gets quiet, start the stopwatch
+                if volume <= THRESHOLD:
+                    silence_timer += chunk_duration
+                    
+                    # 4. if it stays quiet for long enough, stop recording
+                    if silence_timer >= SILENCE_LIMIT:
+                        print("--- SILENCE DETECTED (Stopping...) ---")
+                        break
+                    
+    # connects all the tiny chunks together and saves the file
+    if recording:
+        audio_data = np.concatenate(recording, axis=0)
+        write(filename, fs, audio_data)
+        
+    return filename                    
 
 def transcribe_audio(filename):
     print("--- TRANSCRIBING ---")
@@ -28,6 +69,6 @@ def transcribe_audio(filename):
     return transcript.text
 
 if __name__ == "__main__":
-    # Test if the mic works
+    # Test if mic works
     record_audio("test_mic.wav")
     print("File saved as test_mic.wav. Play it to check your mic!")
