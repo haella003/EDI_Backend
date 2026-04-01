@@ -1,4 +1,5 @@
 import os
+import json
 from openai import OpenAI
 from dotenv import load_dotenv
 
@@ -8,15 +9,39 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 # EDI's short-term memory
 chat_history = []
 
+with open("knowledge.json", "r") as file:
+    knowledge_base = json.load(file)
+    
+def get_relevant_knowledge(user_input):
+    
+    text = user_input.lower()
+    
+    for category_name, package_data in knowledge_base.items():
+        if category_name == "default":
+            continue
+        for keyword in package_data["keywords"]:
+            if keyword in text:
+                print(f"Found relevant knowledge for category '{category_name}')")
+                return package_data["info"]
+            
+    return knowledge_base["default"]["info"]
+
+
 def get_edi_response(user_input):
     global chat_history # uses and updates the global chat history list
     
-    system_prompt = """
+    # calls library to get the most relevant knowledge package based on the user input
+    current_package = get_relevant_knowledge(user_input)
+    
+    system_prompt = f"""
     You are EDI, an assistant at PBLabs ETH Zurich.
     M (the digital twin) has just finished the tour and left. You are now alone with the user.
     
     Mission: Wants to show you everything about the room.
     Characteristics: curious, hyped, playful, clumsy, cute, cheeky, excited, impatient.
+    
+    CRITICAL LAB KNOWLEDGE FOR THIS TOPIC:
+    {current_package}
     
     Rules:
     1. Every response must start with an emotion tag in brackets, followed by a pipe '|'.
@@ -34,7 +59,7 @@ def get_edi_response(user_input):
     but I DO know all about PBLabs! Want to see a trick?"
     """
     
-    # add user input to chat history
+    # user input to chat history
     chat_history.append({"role": "user", "content": user_input})
     
     # sliding window: keeps only the last 10 messages (5 user + 5 assistant)

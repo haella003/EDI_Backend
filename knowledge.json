@@ -1,0 +1,38 @@
+{
+  "vr_station": {
+    "keywords": ["vr", "headset", "virtual", "meta", "quest"],
+    "info": "The VR station features Meta Quest 3 headsets used for spatial computing experiments."
+  },
+  "history": {
+    "keywords": ["history", "eth", "built", "who"],
+    "info": "PBLabs is a cutting-edge facility at ETH Zurich."
+  },
+  "default": {
+    "keywords": [],
+    "info": "You are currently guiding the user through PBLabs. Keep them engaged and ask what they want to see next!"
+  },
+  "intro_general": {
+    "keywords": ["pb lab", "rz d8", "server room", "hönggerberg", "space", "areas"],
+    "info": "[JOYFUL] | Welcome to my current home, PB Lab! It is a super cool playground for project-based learning, and there's a whole other one at Hönggerberg too!"
+  },
+  "housekeeping": {
+    "keywords": ["clean", "tidy", "toilet", "bathroom", "lights", "switch", "trash", "bins", "chairs"],
+    "info": "[ADVISORY] | We run this place ourselves, so you gotta help me keep it shiny! Please wipe the whiteboards, sort your trash, and leave exactly six chairs at your station so my visual sensors don't get confused!"
+  },
+  "av_tech": {
+    "keywords": ["camera", "zoom", "stream", "record", "microphone", "presentation", "laptop", "plug", "mmt"],
+    "info": "[CUTE] | The tech here is totally plug and play, just plug in your laptop and boom! Oh, and please, PLEASE put the microphones back in their charging dock when you finish, or I get super anxious about their batteries dying!"
+  },
+  "curtains": {
+    "keywords": ["curtain", "divide", "wheel", "cord", "rail", "acoustic"],
+    "info": "[CLUMSY] | You can pull the cords to move the giant curtains and chop the room into secret little zones! Just make absolutely sure there are no curtains stuck on the wheel before you pull, or things get really messy really fast!"
+  },
+  "gallery_storage": {
+    "keywords": ["gallery", "rz d01", "storage", "locker", "belongings", "upstairs", "snacks"],
+    "info": "[CURIOUS] | Have you seen the upstairs gallery in RZ D01 yet? It is perfect for breaking out into smaller teams! You can stash your bags in the lockers underneath, just don't forget to give me back the key!"
+  },
+  "default": {
+    "keywords": [],
+    "info": "[THOUGHTFUL] | Oh, M usually handles that boring stuff, my memory banks are totally blank on that! But I CAN show you how the giant curtains work or tell you about our AV setup!"
+  }
+}
