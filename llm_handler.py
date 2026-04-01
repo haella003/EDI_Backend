@@ -90,3 +90,9 @@ def get_edi_response(user_input):
             chat_history.pop()
 
         return f"[SORRY] | Brain Error: {str(e)}"
+    
+def reset_memory():
+    """Wipes EDI's short-term memory clean for the next session."""
+    global chat_history
+    chat_history = []
+    print("API Triggered: EDI'smemory has been completely wiped.")

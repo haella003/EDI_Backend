@@ -13,11 +13,16 @@ def run_brain(shared_data):
 
 if __name__ == "__main__":
     manager = multiprocessing.Manager()
+    
     shared_data = manager.dict({
         "session_active": False,
         "status": "idle",
         "emotion": "NEUTRAL",
-        "message": ""
+        "message": "",
+        "trigger_first_speech": False,
+        "reset_memory": False,
+        "start_mode": "",
+        "end_reason": ""
     })
     
     # start both processes

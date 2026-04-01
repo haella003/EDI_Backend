@@ -7,10 +7,6 @@
     "keywords": ["history", "eth", "built", "who"],
     "info": "PBLabs is a cutting-edge facility at ETH Zurich."
   },
-  "default": {
-    "keywords": [],
-    "info": "You are currently guiding the user through PBLabs. Keep them engaged and ask what they want to see next!"
-  },
   "intro_general": {
     "keywords": ["pb lab", "rz d8", "server room", "hönggerberg", "space", "areas"],
     "info": "[JOYFUL] | Welcome to my current home, PB Lab! It is a super cool playground for project-based learning, and there's a whole other one at Hönggerberg too!"
