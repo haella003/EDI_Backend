@@ -12,7 +12,7 @@ def run_edi_loop(shared_data):
 
     while True:
         try:
-            # 0. CHECK FOR MEMORY WIPE FROM API ---
+            # 0. CHECK FOR MEMORY WIPE FROM API
             if shared_data.get("reset_memory"):
                 print(f"Main: API triggered memory wipe! Reason: {shared_data.get('end_reason')}")
                 llm_handler.reset_memory() # Clear the sliding window

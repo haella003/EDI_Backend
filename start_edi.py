@@ -6,7 +6,8 @@ import main
 def run_api(shared_data):
     # connecting the API to the shared data
     main_api.shared_state = shared_data
-    uvicorn.run(main_api.app, host="127.0.0.1", port=8080)
+    uvicorn.run(main_api.app, host="127.0.0.1", port=8080) # adjust host/port as needed
+    # uvicorn.run(main_api.app, host="0.0.0.0", port=8080)
 
 def run_brain(shared_data):
     main.run_edi_loop(shared_data)

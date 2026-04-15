@@ -22,7 +22,7 @@ def speak(text):
         )
 
         # 1. Save the file
-        response.stream_to_file(speech_file_path)
+        response.stream_to_file(speech_file_path) # fix!
 
         # 2. Play the file using the absolute path
         os.system(f'afplay "{speech_file_path}"')
