@@ -35,14 +35,9 @@ def run_edi_loop(shared_data):
                     first_run = False
                 
                 shared_data["status"] = "thinking"
-                print(f"Main: API triggered first speech! Mode: {shared_data.get('start_mode')}")
+                print(f"Main: API triggered first speech! Waking up EDI")
                 
-                # Tell the LLM how to greet the user based on the API command
-                if shared_data.get("start_mode") == "m_handoff":
-                    intro_prompt = "M just finished the tour and left. Introduce yourself to the user playfully!"
-                else:
-                    intro_prompt = "The user skipped M's intro. Greet them directly and energetically!"
-                
+                intro_prompt = "The user has just arrived at your station. Greet them energetically and welcome them to the PB Lab!"
                 raw_response = llm_handler.get_edi_response(intro_prompt)
                 
                 # Parse emotion (Using your awesome code!)
@@ -79,7 +74,8 @@ def run_edi_loop(shared_data):
             
             # 4. THINKING PHASE
             shared_data["status"] = "thinking"
-            raw_response = get_edi_response(user_text)
+            raw_response = llm_handler.get_edi_response(user_text)
+            
             print(f"EDI (raw): {raw_response}")
             
             if "|" in raw_response:

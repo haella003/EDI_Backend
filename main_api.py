@@ -1,21 +1,17 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Optional
 
 app = FastAPI()
 
-# --- Models for incoming data ---
-
-# Start options
-class StartRequest(BaseModel):
-    mode: str # e.g. "m_handoff", "direct_edi"
+# Model for incoming data
 
 # End options
 class EndRequest(BaseModel):
     reason: str # e.g. "end_edi", "back_to_m"
 
-# The "Walkie-Talkie" - start_edi.py will fill this in automatically
+# The "Walkie-Talkie"
+# start_edi.py will fill this in automatically
 shared_state = None
 
 app.add_middleware(
@@ -31,22 +27,18 @@ def read_root():
 
 # --- Start options ---
 @app.post("/session/start")
-def start_session(request: StartRequest):
+def start_session():
     if shared_state is not None:
         shared_state["session_active"] = True
-        shared_state["start_mode"] = request.mode
+        shared_state["trigger_first_speech"] = True
+
+        print("API: EDI awakened and listen.")
         
-        if request.mode == "m_handoff":
-            print("API: M has left. EDI is now active and taking over the tour.")
-            shared_state["trigger_first_speech"] = True
-            return {"message": "EDI Awakened via M Handoff"}
-        
-        elif request.mode == "direct_edi":
-            print("API: User skipped M. Directly starting EDI.")
-            shared_state["trigger_first_speech"] = True
-            return {"message": "EDI Awakened Directly"}
-            
-        return {"message": f"Session started with mode: {request.mode}"}
+        return {
+            "status": "starting",
+            "emotion": "NEUTRAL",
+            "description": "EDI is powering up and preparing to greet the user."
+        }
             
     return {"error": "Shared state not initialized"}
     
@@ -66,7 +58,7 @@ def end_session(request: EndRequest):
         
     return {"error": "Shared state not initialized"}
     
-
+    
 # --- Status ---
 @app.get("/edi/status")
 def get_status():
