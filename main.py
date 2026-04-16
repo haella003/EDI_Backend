@@ -28,6 +28,16 @@ def run_edi_loop(shared_data):
                 time.sleep(1)
                 continue
             
+            # HELPER: Build emotion rules from frontend
+            emotions_list = shared_data.get("available_emotions", [])
+            emotion_rules_text = ""
+            
+            if emotions_list:
+                emotion_rules_text = "\n\IMPORTANT - You must start your reponse with one of these emotion tags based on these rules:\n"
+                for emotion in emotions_list:
+                    emotion_rules_text += f"- {emotion['name']}: {emotion['description']}\n"
+                emotion_rules_text += "Format: [EMOTION_NAME] | your message here."
+            
             # 2. GREETING LOGIC
             if shared_data.get("trigger_first_speech"):
                 if first_run:
@@ -38,6 +48,9 @@ def run_edi_loop(shared_data):
                 print(f"Main: API triggered first speech! Waking up EDI")
                 
                 intro_prompt = "The user has just arrived at your station. Greet them energetically and welcome them to the PB Lab!"
+                
+                # Inject the emotion rules into the greeting prompt
+                intro_prompt += emotion_rules_text
                 raw_response = llm_handler.get_edi_response(intro_prompt)
                 
                 # Parse emotion (Using your awesome code!)
@@ -74,7 +87,10 @@ def run_edi_loop(shared_data):
             
             # 4. THINKING PHASE
             shared_data["status"] = "thinking"
-            raw_response = llm_handler.get_edi_response(user_text)
+            
+            # inject the emotion rules into every question the user asks
+            full_prompt = user_text + emotion_rules_text
+            raw_response = llm_handler.get_edi_response(full_prompt)
             
             print(f"EDI (raw): {raw_response}")
             

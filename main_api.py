@@ -1,17 +1,26 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from typing import List, Optional
 
 app = FastAPI()
 
-# Model for incoming data
+# Models for incoming data
+
+# model for emotion definitions
+class EmotionDef(BaseModel):
+    name: str
+    description: str
+    
+# main start request model
+class StartRequest(BaseModel):
+    initial_emotion: str = "NETURAL"
+    available_emotions: List[EmotionDef] = []
 
 # End options
 class EndRequest(BaseModel):
-    reason: str # e.g. "end_edi", "back_to_m"
+    reason: str
 
-# The "Walkie-Talkie"
-# start_edi.py will fill this in automatically
 shared_state = None
 
 app.add_middleware(
@@ -25,25 +34,28 @@ app.add_middleware(
 def read_root():
     return {"message": "EDI API is Active"}
 
-# --- Start options ---
+# Start Options
 @app.post("/session/start")
 def start_session():
     if shared_state is not None:
         shared_state["session_active"] = True
         shared_state["trigger_first_speech"] = True
-
-        print("API: EDI awakened and listen.")
+        
+        # save list of emotions that the frontend sends
+        shared_state["initial_emotion"] = request.initial_emotion
+        shared_state["available_emotions"] = [{"name": e.name, "description": e.description} for e in request.available_emotions]
+        
+        print(f"API: Session started. Received {len(request.available_emotions)} emotions from frontend.")
         
         return {
             "status": "starting",
-            "emotion": "NEUTRAL",
-            "description": "EDI is powering up and preparing to greet the user."
+            "description": "Emotions loaded successfully. EDI is booting up."
         }
             
     return {"error": "Shared state not initialized"}
     
     
-# --- End options ---
+# End Options
 @app.post("/session/end")
 def end_session(request: EndRequest):
     if shared_state is not None:
