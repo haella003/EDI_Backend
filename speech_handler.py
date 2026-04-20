@@ -1,39 +1,26 @@
 import os
-from openai import OpenAI
-from pathlib import Path
-from dotenv import load_dotenv
-
-load_dotenv()
-
-# Initialize the client
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+import re
 
 def speak(text):
-    # This creates a solid path to the project folder
-    speech_file_path = Path.cwd() / "temp_speech.mp3"
-    
     try:
-        print(f" EDI is thinking of how to say: '{text[:20]}...'")
+        # 1. clean text e.g. remove [JOYFUL] |
+        clean_text = re.sub(r"\[.*?\]\s*\|\s*", "", text)
         
-        response = client.audio.speech.create(
-            model="tts-1",
-            voice="onyx",
-            input=text
-        )
-
-        # 1. Save the file
-        response.stream_to_file(speech_file_path) # fix!
-
-        # 2. Play the file using the absolute path
-        os.system(f'afplay "{speech_file_path}"')
-
-        # 3. Clean up
-        if speech_file_path.exists():
-            os.remove(speech_file_path)
+        # 2. delete Emojis and non-ASCII characters
+        clean_text = re.sub(r'[^\x00-\x7F]+', '', clean_text)
         
+        # 3. remove exclamation and quotation marks
+        clean_text = clean_text.replace('"', '').replace("'", "")
+
+        # speak only if there is text left after filtering
+        if clean_text.strip():
+            print(f"--- EDI SPEAKING (No Emojis): {clean_text[:30]}... ---")
+            # the Mac command 'say'
+            os.system(f'say -v Samantha "{clean_text}"')
+    
     except Exception as e:
         print(f" Voice Error: {e}")
-        
+            
 if __name__ == "__main__":
-    speak("Hello PBLabs! I am EDI, and I am hyped to be here at ETH Zurich!")
-    
+    # Test with emotion tag
+    speak("[JOYFUL] | I am EDI, running locally on your hardware. Hello PBLabs, I am hyped to be here at ETH Zurich!")

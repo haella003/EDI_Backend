@@ -2,11 +2,13 @@ import sounddevice as sd
 import numpy as np
 from scipy.io.wavfile import write
 import os
-from openai import OpenAI
 from dotenv import load_dotenv
+from faster_whisper import WhisperModel
 
-load_dotenv()
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Local Whisper Setup
+# loading the model at the beginning 
+print("--- LOADING LOCAL WHISPER MODEL ---")
+whisper_model = WhisperModel("base", device="cpu", compute_type="int8")
 
 # voice activity detection
 THRESHOLD = 0.015 # How loud the sound has to be to count as speech, lower = more sensitive 
@@ -61,12 +63,17 @@ def record_audio(filename="input.wav", fs=44100):
 
 def transcribe_audio(filename):
     print("--- TRANSCRIBING ---")
-    with open(filename, "rb") as audio_file:
-        transcript = client.audio.transcriptions.create(
-            model="whisper-1",
-            file=audio_file
-        )
-    return transcript.text
+    
+    # beam_size=5 ist ein Standardwert für gute Genauigkeit
+    segments, info = whisper_model.transcribe(filename, beam_size=5)
+    
+    # put segements together to one text
+    full_text = ""
+    for segment in segments:
+        full_text += segment.text
+        
+    print(f"EDI heard: {full_text}")
+    return full_text.strip()
 
 if __name__ == "__main__":
     # Test if mic works

@@ -14,13 +14,14 @@ class EmotionDef(BaseModel):
     
 # main start request model
 class StartRequest(BaseModel):
-    initial_emotion: str = "NETURAL"
+    initial_emotion: str = "NEUTRAL"
     available_emotions: List[EmotionDef] = []
 
 # End options
 class EndRequest(BaseModel):
     reason: str
 
+# start_edi.py will set this to connect the API to the shared data
 shared_state = None
 
 app.add_middleware(
@@ -36,7 +37,7 @@ def read_root():
 
 # Start Options
 @app.post("/session/start")
-def start_session():
+def start_session(request: StartRequest):
     if shared_state is not None:
         shared_state["session_active"] = True
         shared_state["trigger_first_speech"] = True
@@ -68,7 +69,7 @@ def end_session(request: EndRequest):
         print(f"API: Session ended. Reason: {request.reason}")
         return {"message": f"EDI session closed successfully. Reason: {request.reason}"}
         
-    return {"error": "Shared state not initialized"}
+    return {"status": "error", "message": "Shared state not initialized"}
     
     
 # --- Status ---

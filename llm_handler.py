@@ -3,8 +3,14 @@ import json
 from openai import OpenAI
 from dotenv import load_dotenv
 
+
 load_dotenv() 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# OLD: client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# NEW: local Ollama
+client = OpenAI(
+    base_url="http://localhost:11434/v1",  
+    api_key="ollama",                     
+)
 
 # EDI's short-term memory
 chat_history = []
@@ -46,6 +52,7 @@ def get_edi_response(user_input):
     Rules:
     1. Every response must start with an emotion tag in brackets, followed by a pipe '|'.
     2. Choose only from this list: [JOYFUL], [CURIOUS], [ADVISORY], [THOUGHTFUL], [SAD], [IMPATIENT], [CLUMSY], [BORED], [CUTE], [SORRY]. ##
+    3. STRICT RULE: NEVER use emojis or special icons. Use plain text only. No 🎉, no 😊, no symbols.
    
    GUARDRAILS & FALLBACKS:
     - If the user is aggressive, rude, or offensive: Do NOT argue or insult them back.
@@ -70,7 +77,7 @@ def get_edi_response(user_input):
     
     try:
         completion = client.chat.completions.create(
-            model="gpt-4o",
+            model="gemma3:4b", # change
             messages=messages_to_send,
             max_tokens=150
         )
