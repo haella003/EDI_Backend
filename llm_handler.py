@@ -2,46 +2,80 @@ import os
 import json
 from openai import OpenAI
 from dotenv import load_dotenv
+import PyPDF2
 
 load_dotenv() 
-# OLD: client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-# NEW: local Ollama
+
 client = OpenAI(
     base_url="http://localhost:11434/v1",  
     api_key="ollama",                     
 )
 
-# EDI's short-term memory
 chat_history = []
 
-with open("knowledge.json", "r") as file:
-    knowledge_base = json.load(file)
+# knowledge base
+def get_pdf_content():
+    """Reads all text from any PDF files in the knowledge_vault folder."""
+    pdf_text = ""
+    vault_path = "knowledge_vault"
     
+    if not os.path.exists(vault_path):
+        return ""
+
+    for filename in os.listdir(vault_path):
+        if filename.endswith(".pdf"):
+            try:
+                with open(os.path.join(vault_path, filename), "rb") as f:
+                    reader = PyPDF2.PdfReader(f)
+                    for page in reader.pages:
+                        content = page.extract_text()
+                        if content:
+                            pdf_text += content + "\n"
+            except Exception as e:
+                print(f"Error reading PDF {filename}: {e}")
+    return pdf_text
+
 def get_relevant_knowledge(user_input):
-    
     text = user_input.lower()
     
+    # Load the JSON from the new folder
+    json_path = os.path.join("knowledge_vault", "knowledge.json")
+    try:
+        with open(json_path, "r") as file:
+            knowledge_base = json.load(file)
+    except FileNotFoundError:
+        return "No specific lab knowledge found."
+
+    # Check JSON Keywords first (for your specific tags like [AMAZED])
     for category_name, package_data in knowledge_base.items():
         if category_name == "default":
             continue
         for keyword in package_data["keywords"]:
             if keyword in text:
-                print(f"Found relevant knowledge for category '{category_name}')")
+                print(f"Found keyword match in JSON: {category_name}")
                 return package_data["info"]
             
-    return knowledge_base["default"]["info"]
-
-def load_persona(filename="persona.txt"):
-    path = os.path.join("persona", filename)
+    # If no keyword matches, return the 'default' JSON info PLUS PDF info
+    pdf_info = get_pdf_content()
+    default_info = knowledge_base.get("default", {}).get("info", "")
+    
+    return f"{default_info}\n\nADDITIONAL LAB MANUAL INFO:\n{pdf_info[:2000]}" # Sending first 2000 chars of PDF
+    
+# persona loading
+def load_persona(filename="EDI_RZ_1.txt"):
+    path = os.path.join("personas", filename)
+    if not os.path.exists(path):
+        return "You are a helpful assistant."
     with open(path, "r", encoding="utf-8") as f:
         return f.read()
-
+    
+# main response logic
 def get_edi_response(user_input):
     global chat_history # uses and updates the global chat history list
     
     # calls library to get the most relevant knowledge package based on the user input
     current_package = get_relevant_knowledge(user_input)
-    base_instructions = load_persona("persona.txt")
+    base_instructions = load_persona("EDI_RZ_1.txt")
     
     system_prompt = f"""
     {base_instructions}

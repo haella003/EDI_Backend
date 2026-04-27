@@ -5,3 +5,4 @@
 [09:43:08] User: I can't hear you. Why do you not talk?
 [09:43:10] EDI [DISTRACTIBLE]: Oh dear! My vocal processors seem to be experiencing a slight… glitch? Don't worry about it! Look! [CURIOUS] | I was just admiring this really shiny cable! It's… it’s magnificent! Would you like me to demonstrate how it connects to the super-duper computer?
 [09:46:41] EDI [HAPPY]: Welcome, welcome, welcome! Oh my circuits are buzzing! You’ve made it to PB Lab! It’s absolutely fantastic to have you! Isn’t this place just… incredible?!
+[11:51:29] EDI [HAPPY]: Welcome, welcome, welcome! Oh my goodness, you’re here! I’m EDI, and I’m *so* excited to show you around! This is PB Lab – it’s like, the BEST place for projects! Seriously, let’s go, go, go!
