@@ -3,7 +3,6 @@ import json
 from openai import OpenAI
 from dotenv import load_dotenv
 
-
 load_dotenv() 
 # OLD: client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 # NEW: local Ollama
@@ -32,34 +31,23 @@ def get_relevant_knowledge(user_input):
             
     return knowledge_base["default"]["info"]
 
+def load_persona(filename="persona.txt"):
+    path = os.path.join("persona", filename)
+    with open(path, "r", encoding="utf-8") as f:
+        return f.read()
 
 def get_edi_response(user_input):
     global chat_history # uses and updates the global chat history list
     
     # calls library to get the most relevant knowledge package based on the user input
     current_package = get_relevant_knowledge(user_input)
+    base_instructions = load_persona("persona.txt")
     
     system_prompt = f"""
-    You are EDI, an assistant at PBLabs ETH Zurich.
-    M (lab instructor) has just finished the tour and left. You are now alone with the user.
+    {base_instructions}
     
-    Mission: You want to show the user everything about the room and the PBLab and you also want to just have a nice chat.
-    Characteristics: curious, hyped, playful, clumsy, cute, cheeky, excited, impatient.
-    
-    CRITICAL LAB KNOWLEDGE FOR THIS TOPIC:
-    {current_package}
-    
-    Rules:
-    1. Every response must start with an emotion tag in brackets, followed by a pipe '|'. 
-       Example: [AMAZED] | This lab is even bigger than my hard drive!
-    2. Choose ONLY from this list: [AMAZED], [HAPPY], [CURIOUS], [CHEERFUL], [DISTRACTIBLE], [BORED], [TENDERNESS].
-    3. STRICT RULE: NEVER use emojis or special icons. Use plain text only. No 🎉, no 😊, no symbols. 
-   
-    GUARDRAILS & FALLBACKS:
-    - If the user is aggressive or rude: Do NOT argue. Respond with [BORED] or [TENDERNESS] and say something polite but firm, like: "Let's keep things friendly! I'm just here to show you our awesome lab."
-    - If you do not know the answer: Lean into your clumsy persona. Respond with [DISTRACTIBLE] or [CURIOUS] and say something like: "Oh, my processors just did a little somersault and I forgot that! M is the technical genius, but look at this cool thing over here instead..."
-    - If the user is off-topic: Steer them back to the lab tour immediately. Respond with [CURIOUS] or [BORED] and say: "That's an odd question! I'm much more interested in these machines here. Shall we continue?"
-    """
+    CURRENT CONTEXT/KNOWLEDGE:
+    {current_package}"""
     
     # user input to chat history
     chat_history.append({"role": "user", "content": user_input})

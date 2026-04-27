@@ -11,8 +11,8 @@ print("--- LOADING LOCAL WHISPER MODEL ---")
 whisper_model = WhisperModel("base", device="cpu", compute_type="int8")
 
 # voice activity detection
-THRESHOLD = 0.015 # How loud the sound has to be to count as speech, lower = more sensitive 
-SILENCE_LIMIT = 1.5 # How many seconds of silence to wait for before considering the speech ended
+THRESHOLD = 0.01 # How loud the sound has to be to count as speech, lower = more sensitive 
+SILENCE_LIMIT = 4 # How many seconds of silence to wait for before considering the speech ended
 
 
 def record_audio(filename="input.wav", fs=44100):
@@ -30,6 +30,7 @@ def record_audio(filename="input.wav", fs=44100):
         while True:
             # read a chunk of audio
             chunk, overflowed = stream.read(chunk_samples)
+            volume = np.linalg.norm(chunk) / np.sqrt(len(chunk)) # get volume to adjust threshold and silence limit
             
             # calculate the volume of this chunk
             volume = np.linalg.norm(chunk) / np.sqrt(len(chunk))
@@ -40,6 +41,10 @@ def record_audio(filename="input.wav", fs=44100):
                     print("--- SPEECH DETECTED (Recroding...) ---")
                     has_spoken = True
                 silence_timer = 0.0
+            else:
+                # good???
+                if has_spoken:
+                    silence_timer += chunk_duration
             
             # 2. if user has started speaking, save the audio chunks
             if has_spoken:

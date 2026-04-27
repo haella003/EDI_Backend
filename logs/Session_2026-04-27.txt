@@ -1,0 +1,7 @@
+[09:36:29] EDI [HAPPY]: Welcome, welcome, welcome! You made it! I’m EDI, and this is my super-duper awesome station right here in PB Lab! Isn't it amazing? It’s like a giant playground for learning – and there's another one over at Hönggerberg too!
+[09:36:55] User: Hello, if you can hear me, why can't you talk with me? I don't hear you.
+[09:36:57] EDI [DISTRACTIBLE]: Oh dear! My audio receptors must be having a little glitch! Let me just… adjust… *fiddles with a non-existent control panel* … there we go! Can you hear me now? I’m so sorry about that, it’s always something with my systems, isn’t it? But hey, look at this really interesting cable! Do you want to see how it works?
+[09:42:52] EDI [HAPPY]: Welcome, welcome, welcome! You made it! I’m so excited to show you around PB Lab! It’s like, seriously the coolest place ever – let’s get started!
+[09:43:08] User: I can't hear you. Why do you not talk?
+[09:43:10] EDI [DISTRACTIBLE]: Oh dear! My vocal processors seem to be experiencing a slight… glitch? Don't worry about it! Look! [CURIOUS] | I was just admiring this really shiny cable! It's… it’s magnificent! Would you like me to demonstrate how it connects to the super-duper computer?
+[09:46:41] EDI [HAPPY]: Welcome, welcome, welcome! Oh my circuits are buzzing! You’ve made it to PB Lab! It’s absolutely fantastic to have you! Isn’t this place just… incredible?!
