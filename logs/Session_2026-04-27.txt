@@ -6,3 +6,17 @@
 [09:43:10] EDI [DISTRACTIBLE]: Oh dear! My vocal processors seem to be experiencing a slight… glitch? Don't worry about it! Look! [CURIOUS] | I was just admiring this really shiny cable! It's… it’s magnificent! Would you like me to demonstrate how it connects to the super-duper computer?
 [09:46:41] EDI [HAPPY]: Welcome, welcome, welcome! Oh my circuits are buzzing! You’ve made it to PB Lab! It’s absolutely fantastic to have you! Isn’t this place just… incredible?!
 [11:51:29] EDI [HAPPY]: Welcome, welcome, welcome! Oh my goodness, you’re here! I’m EDI, and I’m *so* excited to show you around! This is PB Lab – it’s like, the BEST place for projects! Seriously, let’s go, go, go!
+[15:26:17] EDI [HAPPY]: Woohoo! You're here! Welcome, welcome, welcome to PB Lab! I'm EDI, and I’m *so* excited to show you around! Isn't this just… amazing?!
+[15:26:28] User: Yeah.
+[15:26:31] EDI [CURIOUS]: “Yeah?” Just… yeah? Oh my goodness, it *is* amazing, isn’t it? Like, seriously! Do you… do you see all the curtains? They’re *giant*! I can tell you all about how they work, or… or we could just stare at them for a bit! What do you think? [DISTRACTIBLE] | Oh, wait, did you know that M used to try and climb them once? It was… a bit of a disaster!
+[15:26:39] User: Und das... ...kund hier bist du so... ...guck mal... ...guck mal...
+[15:31:15] EDI [HAPPY]: Welcome, welcome, welcome! Oh my goodness, you’re here! I’m EDI, and I’m *so* excited to show you around the PB Lab! It’s seriously the best place ever for making awesome projects, you know?
+[15:31:23] User: Hallo, hallo, küscht mich.
+[15:31:25] EDI [DISTRACTIBLE]: Oh my goodness, did you just… talk to me? That’s… amazing! I’m still figuring out how to properly respond to, like, *everyone*! But, hello! It’s so nice to meet you! Let me just…adjust my sensors… Wow, you want to be… kissed? That’s… unexpected! [TENDERNESS] | Are you okay? Is everything alright?
+[15:31:34] User: نضيف دفع دروسة
+[15:33:10] EDI [HAPPY]: Woohoo! Welcome, welcome, welcome! You made it! I'm EDI, and I’m SO excited to have you here at PBLabs! Isn’t this place just… incredible?
+[15:34:15] EDI [HAPPY]: Welcome, welcome, welcome! Oh my goodness, you’re here! I’m EDI, and I’m *so* excited to show you around the PBLab! It's seriously the best place ever for making awesome projects, you know?
+[15:34:57] EDI [HAPPY]: Woohoo! You’re here! Welcome, welcome, welcome to PB Lab! I’m EDI, and I'm *so* excited to show you around! Seriously, this is like, the best place ever for making awesome projects!
+[15:44:21] EDI [HAPPY]: Oh my goodness, you’re here! Welcome, welcome, welcome to PB Lab! I am *so* excited to have you! It’s, like, the best place ever for building awesome things, you know?
+[15:44:45] User: that I found you, I don't know how the curtains function. Can you explain that to me?
+[15:44:48] EDI [CURIOUS]: Really?! You noticed the curtains?! That’s brilliant! They’re, like, totally secret! See, there are these cords, and if you pull them, *whoosh* – the curtains move! But, and this is super important, they’re attached to a wheel, and if you pull too hard, or if they get stuck, it’s a bit of a…well, a *situation*! [DISTRACTIBLE] | Seriously, it's happened before! Let’s just be super cautious, okay?

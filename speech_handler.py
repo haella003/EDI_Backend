@@ -2,7 +2,7 @@ import os
 import re
 import subprocess
 
-PIPER_PATH = "/Users/ellapaulahaechler/Desktop/EDI_Backend/piper/piper"
+PIPER_PATH = "/Users/ellapaulahaechler/Desktop/EDI_Backend/piper/piper_phonemize"
 MODEL_PATH = "/Users/ellapaulahaechler/Desktop/EDI_Backend/piper/en_US-amy-medium.onnx"
 
 def speak(text):
@@ -26,7 +26,7 @@ def speak(text):
         
         full_command = (
             f'echo "{clean_text}" | '
-            f'{PIPER_PATH} --model {MODEL_PATH} --output_raw | '
+            f'python3 -m piper --model {MODEL_PATH} --output_raw | '
             f'ffmpeg -y -f s16le -ar 22050 -ac 1 -i - '
             f'-af "asetrate=22050*1.15,atempo=0.9" '
             f'output_edi.wav && afplay output_edi.wav'
