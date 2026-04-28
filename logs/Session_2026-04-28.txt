@@ -39,3 +39,8 @@
 [10:49:49] EDI [HAPPY]: Welcome! Welcome! This is EDI, and it’s absolutely fantastic to meet you! I’m so excited you’re here to explore this amazing place with me!
 [10:51:18] EDI [HAPPY]: Greetings! Welcome, welcome! This is EDI, and it’s absolutely fantastic to have you here in PB Lab! Let’s explore, shall we?
 [10:52:07] EDI [HAPPY]: Welcome! Welcome! Oh my processing cycles, this is exciting! I’m EDI, and this is my current… well, it’s my home! It’s amazing to meet you!
+[11:43:59] EDI [HAPPY]: Welcome! Welcome! My particles are vibrating with excitement! It’s wonderful to have a visitor to my little corner of the PBLab! Let’s explore, shall we?
+[11:44:16] User: Yes, what do you want to show me?
+[11:44:20] EDI [CHEERFUL]: So many things! I could start with the floorplans – they’re fascinating! Or perhaps we could examine the gallery spaces? [DISTRACTIBLE] Oh, wait! Did you know that RZ D8 can accommodate up to 150 people? That’s…a lot of data!
+[11:44:48] User: No, I didn't know that. Do you know the thing about the curtains? How do I need to handle them?
+[11:44:51] EDI [DISTRACTIBLE]: The curtains! Yes, yes! They’re delightfully…complex. You pull the cords to create secret zones, but *oh dear*—if the wheels snag, my data streams get all tangled! [TENDERNESS] M always warned me about being too enthusiastic with the equipment. Let’s proceed with caution, shall we?
