@@ -37,8 +37,9 @@ def get_pdf_content():
 
 def get_relevant_knowledge(user_input):
     text = user_input.lower()
+    combined_info = ""
     
-    # Load the JSON from the new folder
+    # Load the JSON
     json_path = os.path.join("knowledge_vault", "knowledge.json")
     try:
         with open(json_path, "r") as file:
@@ -46,21 +47,30 @@ def get_relevant_knowledge(user_input):
     except FileNotFoundError:
         return "No specific lab knowledge found."
 
-    # Check JSON Keywords first (for your specific tags like [AMAZED])
+    # Check for keyword matches in the JSON and combine relevant info
+    found_keywords = []
     for category_name, package_data in knowledge_base.items():
         if category_name == "default":
             continue
         for keyword in package_data["keywords"]:
             if keyword in text:
-                print(f"Found keyword match in JSON: {category_name}")
-                return package_data["info"]
+                found_keywords.append(category_name)
+                combined_info += f"FACT ({category_name}): {package_data['info']}\n"
+    
+    if found_keywords:
+        print(f"Combined JSON matches: {', '.join(found_keywords)}")
             
-    # If no keyword matches, return the 'default' JSON info PLUS PDF info
-    pdf_info = get_pdf_content()
+    # Add default info at the end
     default_info = knowledge_base.get("default", {}).get("info", "")
+    combined_info = f"GENERAL LAB RULES: {default_info}\n\n" + combined_info
     
-    return f"{default_info}\n\nADDITIONAL LAB MANUAL INFO:\n{pdf_info[:2000]}" # Sending first 2000 chars of PDF
-    
+    # Add PDF content
+    pdf_info = get_pdf_content()
+    if pdf_info:
+        combined_info += f"\nTECHNICAL MANUAL DETAILS:\n{pdf_info[:2000]}" # limit to first 2000 chars to avoid overwhelming the prompt
+        
+    return combined_info
+        
 # persona loading
 def load_persona(filename="EDI_RZ_1.txt"):
     path = os.path.join("personas", filename)
