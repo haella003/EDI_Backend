@@ -28,7 +28,7 @@ def speak(text):
             f'echo "{clean_text}" | '
             f'python3 -m piper --model {MODEL_PATH} --output_raw | '
             f'ffmpeg -y -f s16le -ar 22050 -ac 1 -i - '
-            f'-af "asetrate=22050*1.15,atempo=0.9" '
+            f'-af "asetrate=22050*1.2,atempo=0.85, vibrato=f=5:d=0.2" ' 
             f'output_edi.wav && afplay output_edi.wav'
         )
         
