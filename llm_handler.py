@@ -58,11 +58,11 @@ def get_relevant_knowledge(user_input):
                 combined_info += f"FACT ({category_name}): {package_data['info']}\n"
     
     if found_keywords:
-        print(f"Combined JSON matches: {', '.join(found_keywords)}")
+        #print(f"Combined JSON matches: {', '.join(found_keywords)}")
             
     # Add default info at the end
-    default_info = knowledge_base.get("default", {}).get("info", "")
-    combined_info = f"GENERAL LAB RULES: {default_info}\n\n" + combined_info
+        default_info = knowledge_base.get("default", {}).get("info", "")
+        combined_info = f"GENERAL LAB RULES: {default_info}\n\n" + combined_info
     
     # Add PDF content
     pdf_info = get_pdf_content()

@@ -5,6 +5,22 @@ import llm_handler
 from logger_handler import save_chat_log
 from speech_handler import speak
 
+# for chat_with_edi.py to get answer without running the whole loop
+def get_edi_answer(user_text, emotion_rules_text=""):
+    """Takes text, asks the LLM, and returns (message, emotion)"""
+    full_prompt = user_text + emotion_rules_text
+    raw_response = llm_handler.get_edi_response(full_prompt)
+    
+    if "|" in raw_response:
+        parts = raw_response.split("|", 1)
+        emotion = parts.replace("[", "").replace("]", "").strip()
+        message = parts.strip()
+    else:
+        emotion = "NEUTRAL"
+        message = raw_response
+        
+    return message, emotion
+
 def run_edi_loop(shared_data):
     print("EDI SYSTEM ONLINE. WAITING FOR SESSION TO START...")
     first_run = True
@@ -53,7 +69,7 @@ def run_edi_loop(shared_data):
                 intro_prompt += emotion_rules_text
                 raw_response = llm_handler.get_edi_response(intro_prompt)
                 
-                # Parse emotion (Using your awesome code!)
+                # Parse emotion
                 if "|" in raw_response:
                     parts = raw_response.split("|", 1)
                     shared_data["emotion"] = parts[0].replace("[", "").replace("]", "").strip()
@@ -67,23 +83,24 @@ def run_edi_loop(shared_data):
                 save_chat_log("EDI", shared_data["message"], shared_data["emotion"], session_id)
                 speak(shared_data["message"])
                 
-                # Turn off the flag so he doesn't repeat the intro forever!
+                # Turn off the flag so he doesn't repeat the intro forever
                 shared_data["trigger_first_speech"] = False
                 continue # Jump back to the start of the loop to enter listening phase 
             
             # 3. LISTENING PHASE
             shared_data["status"] = "listening"
-            print("\nListening...")
+            print("\n--- EDI IS LISTENING ---")
             
             audio_file = record_audio()
             user_text = transcribe_audio(audio_file)
             
             # guard against empty input
             if not user_text or not user_text.strip():
+                # print("Main: Nothing heard or typed. Restarting loop...")
                 continue
             
-            clean_input = user_text.lower().strip() # This fixes the 'clean_input' error!
-            print(f"User: {user_text}")
+            clean_input = user_text.lower().strip()
+            # print(f"User: {user_text}")
             save_chat_log("User", user_text, "NEUTRAL", session_id)
 
             # THE GOODBYE/POWER OFF GUARD
@@ -111,30 +128,24 @@ def run_edi_loop(shared_data):
             # 4. THINKING PHASE
             shared_data["status"] = "thinking"
             
-            # inject the emotion rules into every question the user asks
-            full_prompt = user_text + emotion_rules_text
-            raw_response = llm_handler.get_edi_response(full_prompt)
+            # Use our new brain function here too!
+            message, emotion = get_edi_answer(user_text, emotion_rules_text)
             
-            print(f"EDI (raw): {raw_response}")
-            
-            if "|" in raw_response:
-                parts = raw_response.split("|", 1)
-                shared_data["emotion"] = parts[0].replace("[", "").replace("]", "").strip()
-                shared_data["message"] = parts[1].strip()
-            else:
-                shared_data["emotion"] = "NEUTRAL"
-                shared_data["message"] = raw_response
-            
-            # 5. SPEAKING PHASE
+            shared_data["message"] = message
+            shared_data["emotion"] = emotion
             shared_data["status"] = "speaking"
-            save_chat_log("EDI", shared_data["message"], shared_data["emotion"], session_id)  # Logger for EDI reponse
+            
+            save_chat_log("EDI", shared_data["message"], shared_data["emotion"], session_id)
             speak(shared_data["message"])
             
-        except KeyboardInterrupt:
-            shared_data["status"] = "offline"
-            print("\nShutting down EDI. Goodbye!")
-            break
         except Exception as e:
             print(f"Error: {e}")
-            shared_data["status"] = "error"
             time.sleep(2)
+
+# --- THE GATEKEEPER ---
+if __name__ == "__main__":
+    # This block ONLY runs if you do 'python3 main.py'
+    # It will NOT run when chat_with_edi.py imports this file.
+    # Since shared_data comes from your Manager/API, you'd usually 
+    # run this via start_edi.py anyway.
+    print("Main.py launched directly. Waiting for API instructions...")
