@@ -82,8 +82,31 @@ def run_edi_loop(shared_data):
             if not user_text or not user_text.strip():
                 continue
             
+            clean_input = user_text.lower().strip() # This fixes the 'clean_input' error!
             print(f"User: {user_text}")
-            save_chat_log("User", user_text, "NEUTRAL", session_id)  # Logger for user input
+            save_chat_log("User", user_text, "NEUTRAL", session_id)
+
+            # THE GOODBYE/POWER OFF GUARD
+            # This triggers the "End" for the frontend without yapping
+            shutdown_triggers = ["goodbye", "bye", "power off", "power of", "go now", "stop session", "by any", "shut down", "shut off", "end session", "end now"]
+            
+            if any(trigger in clean_input for trigger in shutdown_triggers):
+                print("Main: Shutdown Trigger Detected!")
+                
+                # short silent signal or a very quick goodbye
+                shared_data["emotion"] = "TENDERNESS"
+                shared_data["message"] = "Shutting down. Goodbye!"
+                
+                shared_data["status"] = "speaking"
+                speak(shared_data["message"])
+                
+                # This is what Frontend is waiting for to "end the game"
+                shared_data["session_active"] = False
+                shared_data["status"] = "idle"
+                shared_data["reset_memory"] = True
+                
+                print("Main: Session ended. Shared state updated for Frontend.")
+                continue # Skip the rest and wait for a new session
             
             # 4. THINKING PHASE
             shared_data["status"] = "thinking"

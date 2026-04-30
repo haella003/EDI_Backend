@@ -1,7 +1,11 @@
-# tell GitHub to ignore private key and any audio files
+# tell GitHub to ignore private key, audio files and chat logs
 
 .env
 venv/
 __pycache__/
 *.wav
 *.mp3
+
+logs/
+*.log
+chat_history/
